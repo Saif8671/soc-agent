@@ -6,8 +6,7 @@
 ![NodeJS](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
 ![LLMs](https://img.shields.io/badge/AI-Gemini%20|%20Groq%20|%20OpenAI%20|%20Ollama-blue?style=for-the-badge)
 
-A real-time, full-stack **AI-powered Security Operations Center (SOC) triage tool**. Built for the Supervity Auto Platform Hackathon 2025.
-
+A real-time, full-stack **AI-powered Security Operations Center (SOC) triage tool**.
 This application drastically reduces Mean Time To Respond (MTTR) by autonomously parsing, enriching, and scoring security alerts. It acts as an intelligent first-line defender, surfacing critical threats and automating initial response actions while keeping humans in the loop for high-risk decisions.
 
 ---
