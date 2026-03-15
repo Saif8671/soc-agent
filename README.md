@@ -1,130 +1,179 @@
-# 🛡️ SOC Triage Agent — AI-Powered Security Operations
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0d1117,50:1e1b4b,100:4f46e5&height=200&section=header&text=SOC%20Triage%20Agent&fontSize=60&fontColor=ffffff&fontAlignY=38&desc=AI-Powered%20Security%20Operations%20%7C%205-Stage%20Multi-Agent%20Pipeline&descSize=16&descAlignY=60" width="100%"/>
 
-![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-![Vite](https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E)
-![Express](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
-![NodeJS](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
-![LLMs](https://img.shields.io/badge/AI-Gemini%20|%20Groq%20|%20OpenAI%20|%20Ollama-blue?style=for-the-badge)
+<div align="center">
 
-A real-time, full-stack **AI-powered Security Operations Center (SOC) triage tool**.
-This application drastically reduces Mean Time To Respond (MTTR) by autonomously parsing, enriching, and scoring security alerts. It acts as an intelligent first-line defender, surfacing critical threats and automating initial response actions while keeping humans in the loop for high-risk decisions.
-dEPLOYMENT:https://soc-agent-rosy.vercel.app/
----
+[![Live Demo](https://img.shields.io/badge/🔗%20Live%20Demo-soc--agent--rosy.vercel.app-4f46e5?style=for-the-badge&logo=vercel&logoColor=white)](https://soc-agent-rosy.vercel.app/)
 
-## ⚡ Key Features
+![React](https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB)
+![Vite](https://img.shields.io/badge/Vite-B73BFE?style=flat-square&logo=vite&logoColor=FFD62E)
+![Express](https://img.shields.io/badge/Express.js-000000?style=flat-square&logo=express&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=flat-square&logo=nodedotjs&logoColor=white)
+![LLMs](https://img.shields.io/badge/LLMs-Groq%20%7C%20Gemini%20%7C%20OpenAI%20%7C%20Ollama-4f46e5?style=flat-square)
+![License](https://img.shields.io/badge/License-MIT-4f46e5?style=flat-square)
 
-- **🤖 5-Stage Multi-Agent AI Pipeline**: Intelligent agents working in sequence to Handle Intake, Enrichment, Scoring, Execution, and Auditing.
-- **⚡ Real-Time Streaming (SSE)**: Live streaming of the agent's thought processes, decisions, and actions straight to the UI.
-- **🛡️ Threat Intel Integrations**: Built-in support for AbuseIPDB, VirusTotal, and NIST NVD for enriching IOCs (Indicators of Compromise).
-- **🧠 Multi-LLM Support**: Highly resilient AI scoring with seamless fallback between **Groq (Llama 3)**, **Google Gemini 1.5 Flash**, **OpenAI GPT-3.5**, and local **Ollama**.
-- **🧑‍💻 Human-in-the-Loop**: Auto-executes actions for Low/Medium/Critical threats, but enforces an approval gate for "High" severity incidents requiring human judgment.
-- **📊 Comprehensive Audit Trail**: Generates a tamper-evident audit log for post-incident review and compliance.
+</div>
 
 ---
 
-## 🏗️ System Architecture & Design
+## Overview
 
-The system follows an event-driven, pipeline-based architecture consisting of a React frontend communicating with an Express backend via REST and Server-Sent Events (SSE).
+**SOC Triage Agent** is a real-time, full-stack AI security operations tool designed to drastically reduce Mean Time To Respond (MTTR). It autonomously parses, enriches, and scores incoming security alerts through a 5-stage multi-agent pipeline — surfacing critical threats and executing initial response actions while keeping human analysts in the loop for high-severity decisions.
 
-### 1. High-Level Flow 
+Built on an event-driven architecture, the agent streams its reasoning and actions live to the UI via Server-Sent Events, giving analysts full visibility into every decision made.
+
+---
+
+## Features
+
+- **5-stage multi-agent pipeline** — sequential agents for Intake, Enrichment, AI Scoring, Action Execution, and Audit
+- **Real-time SSE streaming** — live feed of agent thought processes, decisions, and actions directly to the dashboard
+- **Threat intel integrations** — AbuseIPDB, VirusTotal, and NIST NVD for enriching IPs, domains, and CVEs
+- **Multi-LLM with fallback** — resilient scoring across Groq (Llama 3), Google Gemini 1.5 Flash, OpenAI GPT-3.5, and local Ollama
+- **Human-in-the-loop gate** — Low/Medium/Critical alerts execute automatically; High severity triggers an analyst approval dialog before any action proceeds
+- **Tamper-evident audit trail** — full ticket record with execution time, steps taken, and context for compliance and post-incident review
+- **MITRE ATT&CK mapping** — alert classification includes framework technique mapping at the intake stage
+
+---
+
+## Architecture
+
+The system follows an event-driven, pipeline-based design. The React frontend communicates with an Express backend via REST for submission and SSE for live streaming.
 
 ```mermaid
 graph TD
     UI[Frontend: React + Vite] -->|POST /api/triage| API[Backend: Express API]
     API -->|SSE Stream| UI
-    
-    subgraph Agent Pipeline [Backend Express Server]
-        A1[🕵️ Agent 1: Intake & Normalise] --> A2[🔍 Agent 2: Enrich & Research]
-        A2 --> A3[🧠 Agent 3: AI Scoring]
-        A3 --> A4[⚡ Agent 4: Action & Approval Gate]
-        A4 --> A5[📝 Agent 5: Audit Trail]
+
+    subgraph Pipeline [Backend Agent Pipeline]
+        A1[Agent 1: Intake & Normalise] --> A2[Agent 2: Enrich & Research]
+        A2 --> A3[Agent 3: AI Scoring]
+        A3 --> A4[Agent 4: Action & Approval Gate]
+        A4 --> A5[Agent 5: Audit Trail]
     end
 
-    A2 -.->|Lookup| TI[(Threat Intel: VirusTotal, AbuseIPDB, NVD)]
+    A2 -.->|Lookup| TI[(VirusTotal · AbuseIPDB · NVD)]
     A3 -.->|Prompt| LLMs[(Groq / Gemini / OpenAI / Ollama)]
-    
     A4 -.->|Approval Needed| HIL{Human-in-the-Loop}
     HIL -->|POST /api/approve| A4
 ```
 
-### 2. The 5 Agents Explained
+### The 5 Agents
 
-1. **Agent 1 (Intake & Normalise)**: Classifies the alert (e.g., Ransomware, Bruteforce), extracts IOCs (IPs, CVEs, Domains), and maps behavior to the MITRE ATT&CK framework.
-2. **Agent 2 (Enrichment)**: reaches out to external Threat Intelligence APIs to gather reputation scores, malicious activity reports, and CVSS severity metrics.
-3. **Agent 3 (AI Score & Decide)**: Sends the normalized context and enriched data to a chosen LLM to perform advanced heuristic analysis, yielding a JSON-structured response with severity, confidence, false-positive likelihood, and recommended actions.
-4. **Agent 4 (Action)**: Executes recommended actions automatically or triggers a human approval workflow depending on severity gates.
-5. **Agent 5 (Audit)**: Consolidates execution time, context, and steps taken into a final ticket record.
+| Agent | Role | Key Output |
+|---|---|---|
+| **1 — Intake & Normalise** | Classifies alert type, extracts IOCs, maps to MITRE ATT&CK | Structured alert object |
+| **2 — Enrichment** | Queries threat intel APIs for IP/domain reputation and CVE CVSS scores | Enriched IOC context |
+| **3 — AI Scoring** | Sends normalised + enriched context to LLM for heuristic analysis | Severity, confidence, false-positive likelihood, recommended actions |
+| **4 — Action & Approval** | Auto-executes for Low/Medium/Critical; gates High severity for human approval | Executed or pending actions |
+| **5 — Audit** | Consolidates all steps, decisions, and metadata into a final ticket record | Immutable audit log |
 
 ---
 
-## 🚀 Setup & Local Installation
+## Getting Started
 
-### Prerequisites
-- Node.js (v18+)
-- npm or yarn
-- API Keys for one or more supported AI providers (Groq, Gemini, OpenAI). Alternatively, a running instance of Ollama.
-- (Optional but recommended) Keys for AbuseIPDB, VirusTotal, NVD Nist.
+**Prerequisites:** Node.js 18+, npm or yarn, at least one LLM API key (Groq, Gemini, or OpenAI), or a running Ollama instance.
 
-### 1. Clone & Setup Backend
+### 1. Clone the repository
 
 ```bash
-cd backend
-npm install
+git clone https://github.com/Saif8671/soc-triage-agent.git
+cd soc-triage-agent
 ```
 
-### 2. Configure Environment Variables
-Inside the `backend` directory, create a `.env` file from the provided `.env.example` (or configure via the `backend/.env` file that exists in the repo):
+### 2. Configure environment variables
+
+```bash
+cp backend/.env.example backend/.env
+```
 
 ```env
 PORT=3001
 
-# --- LLM Providers (At least one is required) ---
+# LLM Providers (at least one required)
 GROQ_API_KEY=your_groq_key_here
 GEMINI_API_KEY=your_gemini_key_here
 OPENAI_API_KEY=your_openai_key_here
 
-# Local AI (Ollama - fallback)
+# Local AI fallback (Ollama)
 OLLAMA_URL=http://localhost:11434
 OLLAMA_MODEL=llama3
 
-# --- Threat Intelligence APIs (Optional but recommended) ---
+# Threat Intelligence APIs (optional but recommended)
 VIRUSTOTAL_API_KEY=your_vt_key
 ABUSEIPDB_API_KEY=your_abuseipdb_key
 NVD_API_KEY=your_nvd_key
 ```
 
-### 3. Run Backend Server
+### 3. Run the backend
+
 ```bash
+cd backend
+npm install
 node server.js
-# Runs on defaults: http://localhost:3001
+# Runs on http://localhost:3001
 ```
 
-### 4. Setup & Run Frontend
-In a new terminal:
+### 4. Run the frontend
+
 ```bash
 cd frontend
 npm install
 npm run dev
-# Vite server starts on: http://localhost:5173
+# Vite dev server at http://localhost:5173
 ```
 
 ---
 
-## 📝 Usage Guide
+## Usage
 
-1. **Access the Dashboard**: Open your browser and navigate to `http://localhost:5173`.
-2. **Input an Alert**: Paste raw system logs, EDR alerts, user-reported phishing emails, or use one of the pre-built templates (e.g., *SSH Brute Force*, *Ransomware Lateral Movement*).
-3. **Initiate Triage**: Click **Run AI Triage**.
-4. **Monitor Real-Time SSE Pipeline**: Watch as the incident is passed off from normalisation to enrichment, then scoring. 
-5. **Human Approval**: If the LLM deems the alert's severity as **High**, the UI will prompt an approval dialog to allow actions to proceed. Provide analyst notes and Accept/Reject.
+1. Open the dashboard at `http://localhost:5173`
+2. Paste a raw alert — system logs, EDR output, phishing report — or use a pre-built template (SSH Brute Force, Ransomware Lateral Movement, etc.)
+3. Click **Run AI Triage**
+4. Watch the SSE pipeline stream live: normalisation → enrichment → AI scoring → action
+5. If severity is assessed as **High**, an analyst approval dialog appears — review the context, add notes, then accept or reject the proposed actions
+
+---
+
+## Roadmap
+
+| Status | Feature |
+|---|---|
+| 📋 Planned | PostgreSQL / MongoDB persistence for audit logs and analyst metrics |
+| 📋 Planned | Native ticketing sync with Jira Service Desk, PagerDuty, ServiceNow |
+| 📋 Planned | Slack / Teams webhook alerts from Agent 4 |
+| 📋 Planned | JWT authentication + RBAC (SOC Analyst vs. Viewer roles) |
 
 ---
 
-## 🔮 Future Enhancements & Production Roadmap
+## Contributing
 
-- **Database Persistence**: Integrate PostgreSQL/MongoDB for storing persistent audit logs, tickets, and analyst metrics.
-- **Ticketing Integration**: Native two-way sync with Jira Service Desk, PagerDuty, or ServiceNow in Agent 4.
-- **Webhooks Response**: Slack/Teams automated webhook alerts.
-- **Authentication**: Add JWT auth + RBAC (Role-Based Access Control) for SOC Analysts vs. Viewers.
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feat/your-feature`
+3. Commit with conventional messages: `git commit -m "feat: describe your change"`
+4. Push and open a pull request
 
 ---
+
+## License
+
+MIT © [Saif ur Rahman](https://github.com/Saif8671)
+Free to use, modify, and distribute with attribution.
+
+---
+
+<div align="center">
+
+**Built by [Saif ur Rahman](https://github.com/Saif8671)**
+
+[![GitHub](https://img.shields.io/badge/GitHub-Saif8671-100000?style=flat-square&logo=github)](https://github.com/Saif8671)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=flat-square&logo=linkedin)](https://linkedin.com/in/saif-ur-rahman-0211002b9)
+[![Portfolio](https://img.shields.io/badge/Portfolio-Visit-00C7B7?style=flat-square&logo=netlify)](https://saif-portfolio8671.netlify.app)
+[![Email](https://img.shields.io/badge/Email-Contact-D14836?style=flat-square&logo=gmail)](mailto:saifurrahman887@gmail.com)
+
+<br/>
+
+*Faster triage. Fewer blind spots. Humans where it matters.*
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:4f46e5,50:1e1b4b,100:0d1117&height=120&section=footer" width="100%"/>
+
+</div>
