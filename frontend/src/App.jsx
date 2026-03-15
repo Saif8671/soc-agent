@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import "./styles.css";
 
-const API = "http://localhost:3001";
+const API = import.meta.env.VITE_API_URL || "http://localhost:3001";
 
 const TEMPLATES = {
   bruteforce: {

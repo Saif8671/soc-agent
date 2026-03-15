@@ -6,7 +6,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 // ── Threat Intel Lookup (simulated real-world APIs) ──────────────────────────
 // In production: replace with real VirusTotal/AbuseIPDB/NVD API calls
