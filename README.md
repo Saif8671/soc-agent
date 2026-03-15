@@ -8,7 +8,7 @@
 
 A real-time, full-stack **AI-powered Security Operations Center (SOC) triage tool**.
 This application drastically reduces Mean Time To Respond (MTTR) by autonomously parsing, enriching, and scoring security alerts. It acts as an intelligent first-line defender, surfacing critical threats and automating initial response actions while keeping humans in the loop for high-risk decisions.
-
+dEPLOYMENT:https://soc-agent-rosy.vercel.app/
 ---
 
 ## ⚡ Key Features
